@@ -29,6 +29,41 @@ public class Driver extends Application {
 
    // @Override
     public void start(Stage stage) throws Exception {
+
+        GridPane letterHand = new GridPane();
+
+        // Create a new GridPane for the letter squares
+        GridPane letterSquares = new GridPane();
+        letterSquares.setPadding(new Insets(10));
+        letterSquares.setHgap(5);
+        letterSquares.setVgap(5);
+
+        // Create the seven Label objects for the letter squares
+        Label[] labels = new Label[7];
+        for (int i = 0; i < 7; i++) {
+            String letter = "h"; // get a randomly chosen letter
+            labels[i] = new Label(letter);
+            labels[i].setPrefSize(50, 50);
+        }
+
+        // Add the letter squares to the new GridPane
+        for (int i = 0; i < 7; i++) {
+            letterSquares.add(labels[i], i, 0);
+        }
+
+        // Add the new GridPane to the main GridPane
+        letterHand.add(letterSquares, 0, BOARD_SIZE + 1);
+
+        // Create a new GridPane to hold the buttons
+        GridPane board = new GridPane();
+
+        // Add some padding around the buttons
+        board.setPadding(new Insets(10));
+
+        // Add some spacing between the buttons
+        board.setHgap(5);
+        board.setVgap(5);
+
         // Set wordsSet
         wordsSet = WordList.setWordsSet();
 
@@ -41,15 +76,7 @@ public class Driver extends Application {
         }
         ///
 
-        // Create a new GridPane to hold the buttons
-        GridPane board = new GridPane();
 
-        // Add some padding around the buttons
-        board.setPadding(new Insets(10));
-
-        // Add some spacing between the buttons
-        board.setHgap(5);
-        board.setVgap(5);
 
         // Loop through the rows and columns of the board and create a new button for each spot
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -72,7 +99,7 @@ public class Driver extends Application {
                         System.out.println(recentWord);
                         Stage pointCountStage = new Stage();
 
-                        if (recentWord != null) {
+                        if (recentWord != "") {
                             wordStatus = "Valid";
                         } else {
                             wordStatus = "Invalid";
@@ -183,7 +210,7 @@ public class Driver extends Application {
 
         // Set the size of the window
         stage.setWidth(800);
-        stage.setHeight(800);
+        stage.setHeight(1000);
 
         // Set the Scene for the Stage
         stage.setScene(scene);
