@@ -6,6 +6,10 @@ import javafx.scene.layout.GridPane;
 
 import java.util.*;
 
+
+
+/// save the board after each turn
+//revert to save if word invalid
 public class WordProcessor {
 
     public static String checkForWord(char[][] grid, Set<String> words) {
@@ -13,6 +17,8 @@ public class WordProcessor {
         if (grid == null || grid.length == 0 || grid[0].length == 0) {
             throw new IllegalArgumentException("Grid must not be null and must have at least one row and column.");
         }
+
+        String foundWord = "";
 
         for (String word : words) {
             if (word.length() > grid.length || word.length() > grid[0].length) {
@@ -32,34 +38,40 @@ public class WordProcessor {
                         String rowString = new String(row);
                         String colString = new String(col);
 
-                        if (word.equals(rowString) || word.equals(colString)) {
-                            return word;
+                        if ((word.equals(rowString) || word.equals(colString)) && word.length() > foundWord.length()) {
+
+                            foundWord = word;
                         }
                     }
                 }
             }
         }
-
-        return null;
+        words.remove(foundWord);
+        return foundWord;
     }
 
     public static int calculatePoints(String word) {
         int points = 0;
+        String curLetter = "";
         if (word != null) {
             for (int i = 0; i < word.length(); i++) { //String.valueOf(example.charAt(0));
-                if (String.valueOf(word.charAt(i)) == "a" || word == "e" || word == "i" || word == "l" || word == "n" || word == "o" || word == "r" || word == "s" || word == "t" || word == "u") { ////////////////////////////////////////////////////////not recognising words for some reason
+                curLetter = String.valueOf(word.charAt(i));
+                System.out.println(String.valueOf(word.charAt(i)));
+                if (curLetter.equals("a") || curLetter.equals("e") || curLetter.equals("i") || curLetter.equals("l") ||
+                        curLetter.equals("n") || curLetter.equals("o") || curLetter.equals("r") || curLetter.equals("s")
+                        || curLetter.equals("t") || curLetter.equals("u")) {
                     points += 1;
-                } else if (String.valueOf(word.charAt(i)) == "d" || word == "g") {
+                } else if (curLetter.equals("d") || curLetter.equals("g")) {
                     points += 2;
-                } else if (String.valueOf(word.charAt(i)) == "b" || word == "c" || word == "m" || word == "p") {
+                } else if (curLetter.equals("b") || curLetter.equals("c") || curLetter.equals("m") || curLetter.equals("p")) {
                     points += 3;
-                } else if (String.valueOf(word.charAt(i)) == "f" || word == "h" || word == "v" || word == "w" || word == "y") {
+                } else if (curLetter.equals("f") || curLetter.equals("h") || curLetter.equals("v") || curLetter.equals("w") || curLetter.equals("y")) {
                     points += 4;
-                } else if (String.valueOf(word.charAt(i)) == "k") {
+                } else if (curLetter.equals("s")) {
                     points += 5;
-                } else if (String.valueOf(word.charAt(i)) == "j" || word == "x") {
+                } else if (curLetter.equals("j") || curLetter.equals("x")) {
                     points += 8;
-                } else if (String.valueOf(word.charAt(i)) == "q" || word == "z") {
+                } else if (curLetter.equals("q") || curLetter.equals("z")) {
                     points += 10;
                 }
             }
