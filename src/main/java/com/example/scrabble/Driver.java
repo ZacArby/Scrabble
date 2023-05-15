@@ -29,30 +29,7 @@ public class Driver extends Application {
 
    // @Override
     public void start(Stage stage) throws Exception {
-
-        GridPane letterHand = new GridPane();
-
-        // Create a new GridPane for the letter squares
-        GridPane letterSquares = new GridPane();
-        letterSquares.setPadding(new Insets(10));
-        letterSquares.setHgap(5);
-        letterSquares.setVgap(5);
-
-        // Create the seven Label objects for the letter squares
-        Label[] labels = new Label[7];
-        for (int i = 0; i < 7; i++) {
-            String letter = "h"; // get a randomly chosen letter
-            labels[i] = new Label(letter);
-            labels[i].setPrefSize(50, 50);
-        }
-
-        // Add the letter squares to the new GridPane
-        for (int i = 0; i < 7; i++) {
-            letterSquares.add(labels[i], i, 0);
-        }
-
-        // Add the new GridPane to the main GridPane
-        letterHand.add(letterSquares, 0, BOARD_SIZE + 1);
+        TurnController.generateLetterHands();
 
         // Create a new GridPane to hold the buttons
         GridPane board = new GridPane();
@@ -106,7 +83,7 @@ public class Driver extends Application {
                         }
 
                         // Create a label and set its text
-                        Label label = new Label("Your word is " + wordStatus + "\n Points: " + wordPoints);
+                        Label label = new Label("Your word is " + wordStatus + "\n Points: " + wordPoints + "\n Word: " + recentWord);
 
 
                         // Create a new scene with the label and set it as the stage's scene
@@ -119,6 +96,20 @@ public class Driver extends Application {
                     }
 
                 });
+
+                // Create hand of letters
+                Label handLetter1 = new Label(Character.toString(TurnController.getLetterFromHand(1, 1)));
+                Label handLetter2 = new Label(Character.toString(TurnController.getLetterFromHand(1, 2)));
+                Label handLetter3 = new Label(Character.toString(TurnController.getLetterFromHand(1, 3)));
+                Label handLetter4 = new Label(Character.toString(TurnController.getLetterFromHand(1, 4)));
+                Label handLetter5 = new Label(Character.toString(TurnController.getLetterFromHand(1, 5)));
+
+                board.add(handLetter1, 5, BOARD_SIZE);
+                board.add(handLetter2, 6, BOARD_SIZE);
+                board.add(handLetter3, 7, BOARD_SIZE);
+                board.add(handLetter4, 8, BOARD_SIZE);
+                board.add(handLetter5, 9, BOARD_SIZE);
+
 
                 button.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
