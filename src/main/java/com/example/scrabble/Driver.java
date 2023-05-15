@@ -115,7 +115,7 @@ public class Driver extends Application {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         // Create pop-up
                         // Create a new Stage for the pop-up
-                        Stage popupStage = new Stage();
+                        Stage popupStage = new Stage(); /////////////////////////////////////////// only have letters in hand appear on virtual keyboard
 
                         // Create a new GridPane to hold the buttons
                         GridPane keyboard = new GridPane();
