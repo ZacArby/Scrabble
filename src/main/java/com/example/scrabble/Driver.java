@@ -9,22 +9,32 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Character.toLowerCase;
 
 public class Driver extends Application {
     // Define the size of the board
     private static final int BOARD_SIZE = 15;
+    public static GridPane board;
     // Keep track of the previously clicked button
     private Button previousButton = null;
     String chosenLetter = "empty";
-    char[][] grid = new char[BOARD_SIZE][BOARD_SIZE]; // create a 2D grid
-    Set<String> wordsSet = new HashSet<>(); // create a set of words
+    static char[][] grid = new char[BOARD_SIZE][BOARD_SIZE]; // create a 2D grid
+    static Set<String> wordsSet = new HashSet<>(); // create a set of words
     String recentWord;
     String wordStatus = "Invalid";
     int wordPoints = 0;
+    Label[] handLetters = new Label[10];
+
+    int playerTurn = 1;
+
+    static ArrayList<Integer> recentPressesXAxis = new ArrayList<>();
+    static ArrayList<Integer> recentPressesYAxis = new ArrayList<>();
 
 
    // @Override
@@ -43,6 +53,8 @@ public class Driver extends Application {
 
         // Set wordsSet
         wordsSet = WordList.setWordsSet();
+
+
 
 
         // Create 2D grid
@@ -65,7 +77,6 @@ public class Driver extends Application {
 
                 // Add the button to the GridPane at the current row and column
                 board.add(button, col, row);
-
                 // Check if inputed word is valid
                 button.setOnKeyPressed(e -> {
                     if (e.getCode() == KeyCode.ENTER) {
@@ -80,6 +91,7 @@ public class Driver extends Application {
                             wordStatus = "Valid";
                         } else {
                             wordStatus = "Invalid";
+                            //BoardController.revertSavedBoard(); //////////////////////
                         }
 
                         // Create a label and set its text
@@ -97,22 +109,20 @@ public class Driver extends Application {
 
                 });
 
-                // Create hand of letters
-                Label handLetter1 = new Label(Character.toString(TurnController.getLetterFromHand(1, 1)));
-                Label handLetter2 = new Label(Character.toString(TurnController.getLetterFromHand(1, 2)));
-                Label handLetter3 = new Label(Character.toString(TurnController.getLetterFromHand(1, 3)));
-                Label handLetter4 = new Label(Character.toString(TurnController.getLetterFromHand(1, 4)));
-                Label handLetter5 = new Label(Character.toString(TurnController.getLetterFromHand(1, 5)));
 
-                board.add(handLetter1, 5, BOARD_SIZE);
-                board.add(handLetter2, 6, BOARD_SIZE);
-                board.add(handLetter3, 7, BOARD_SIZE);
-                board.add(handLetter4, 8, BOARD_SIZE);
-                board.add(handLetter5, 9, BOARD_SIZE);
+                // Create hand of letters
+                for (int i = 0; i < 5; i++){
+                    handLetters[i] = new Label(Character.toString(TurnController.getLetterFromHand(1, i+1)));
+                    board.add(handLetters[i], i+5, BOARD_SIZE);
+                }
 
 
                 button.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
+                        recentPressesXAxis.add(board.getRowIndex(button));
+                        recentPressesYAxis.add(board.getColumnIndex(button));
+                        // Save Board
+
                         // Create pop-up
                         // Create a new Stage for the pop-up
                         Stage popupStage = new Stage(); /////////////////////////////////////////// only have letters in hand appear on virtual keyboard
@@ -143,12 +153,15 @@ public class Driver extends Application {
                                 buttonp.setPrefSize(50, 50);
 
                                 // Add the button to the GridPane at the current row and column
-                                keyboard.add(buttonp, colp, rowp);
+                                if (TurnController.letterHandContains(letter, playerTurn)) {
+                                    keyboard.add(buttonp, colp, rowp);
+                                }
 
                                 // Add an action event handler to the button to close the pop-up
                                 buttonp.setOnAction(eventp -> {
                                     chosenLetter = ((Button) eventp.getSource()).getText();
                                     Label label = new Label(chosenLetter);
+                                    TurnController.deleteLetterFromHand(chosenLetter, playerTurn);
                                     popupStage.close();
                                 });
 
