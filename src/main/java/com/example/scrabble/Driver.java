@@ -20,7 +20,7 @@ import static java.lang.Character.toLowerCase;
 public class Driver extends Application {
     // Define the size of the board
     private static final int BOARD_SIZE = 15;
-    public static GridPane board;
+    public static GridPane board = new GridPane();
     // Keep track of the previously clicked button
     private Button previousButton = null;
     String chosenLetter = "empty";
@@ -91,7 +91,7 @@ public class Driver extends Application {
                             wordStatus = "Valid";
                         } else {
                             wordStatus = "Invalid";
-                            //BoardController.revertSavedBoard(); //////////////////////
+                            BoardController.revertToSavedBoard(); //////////////////////
                         }
 
                         // Create a label and set its text
