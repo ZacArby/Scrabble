@@ -13,4 +13,9 @@
       <module name="Scrabble" target="17" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Scrabble" options="--add-exports javafx.base/com.sun.javafx.collections=com.example.scrabble" />
+    </option>
+  </component>
 </project>
